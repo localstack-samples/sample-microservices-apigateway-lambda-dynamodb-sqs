@@ -35,7 +35,7 @@ EXTRA_CORS_ALLOWED_ORIGINS=* localstack start -d
 
 ## Instructions
 
-You can build and deploy the sample application on LocalStack by running our `Makefile` commands. To deploy the infrastructure, you can run `make deploy` after installing the application dependencies. To test the deployed infrastructure, you can run `make test` to run sample tests. Here are instructions to deploy and test it manually step-by-step.
+You can build and deploy the sample application on LocalStack by running our `Makefile` commands. To deploy the infrastructure, you can run `make deploy` after installing the application dependencies. Here are instructions to deploy and test it manually step-by-step.
 
 ### Creating the infrastructure
 

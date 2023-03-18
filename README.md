@@ -19,6 +19,8 @@ The Serverless microservices application sample demonstrates how you can build a
 
 We are using the following AWS services and their features to build our infrastructure:
 
+TODO
+
 ## Prerequisites
 
 - LocalStack Pro
@@ -85,3 +87,12 @@ curl -X GET 'https://<LOCAL_APIGATEWAY_ENDPOINT>/friends/player2'
 curl -X GET 'https://<LOCAL_APIGATEWAY_ENDPOINT>/friends/player3'
 ```
 
+## GitHub Action
+
+This application sample hosts an example GitHub Action workflow that starts up LocalStack, deploys the infrastructure, and checks the created resources using  `awslocal`. You can find the workflow in the  `.github/workflows/main.yml`  file. To run the workflow, you can fork this repository and push a commit to the  `main`  branch.
+
+Users can adapt this example workflow to run in their own CI environment. LocalStack supports various CI environments, including GitHub Actions, CircleCI, Jenkins, Travis CI, and more. You can find more information about the CI integration in the  [LocalStack documentation](https://docs.localstack.cloud/user-guide/ci/).
+
+## Learn more
+
+The sample application is based on a [public AWS sample app](https://github.com/aws-samples/friend-microservices) that deploys a friend microservice for gaming applications.

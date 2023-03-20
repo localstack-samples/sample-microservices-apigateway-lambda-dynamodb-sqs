@@ -57,3 +57,7 @@ jobs:
           awslocal lambda list-functions
           awslocal sqs list-queues 
           awslocal dynamodb list-tables
+
+      - name: Run tests
+        run: |
+          yarn test

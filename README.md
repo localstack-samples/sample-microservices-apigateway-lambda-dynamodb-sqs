@@ -87,6 +87,12 @@ curl -X GET 'https://<LOCAL_APIGATEWAY_ENDPOINT>/friends/player2'
 curl -X GET 'https://<LOCAL_APIGATEWAY_ENDPOINT>/friends/player3'
 ```
 
+To run the unit tests, you can run the following command:
+
+```shell
+yarn test
+```
+
 ## GitHub Action
 
 This application sample hosts an example GitHub Action workflow that starts up LocalStack, deploys the infrastructure, and checks the created resources using  `awslocal`. You can find the workflow in the  `.github/workflows/main.yml`  file. To run the workflow, you can fork this repository and push a commit to the  `main`  branch.

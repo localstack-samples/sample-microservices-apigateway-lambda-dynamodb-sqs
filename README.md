@@ -1,4 +1,4 @@
-# Serverless microservices with Amazon API Gateway, Amazon DynamoDB, Amazon SQS, and AWS Lambda
+# Serverless Microservices with Amazon API Gateway, DynamoDB, SQS, and Lambda
 
 | Key          | Value                                                                                                |
 | ------------ | ---------------------------------------------------------------------------------------------------- |

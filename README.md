@@ -24,7 +24,7 @@ TODO
 ## Prerequisites
 
 - LocalStack Pro
-- [AWS CLI](https://docs.localstack.cloud/user-guide/integrations/aws-cli/) with the `awslocal` wrapper.
+- [AWS CLI](https://docs.localstack.cloud/user-guide/integrations/aws-cli/) with the [`awslocal`](https://github.com/localstack/awscli-local) wrapper.
 - [CDK](https://docs.localstack.cloud/user-guide/integrations/aws-cdk/) with the [`cdklocal`](https://github.com/localstack/aws-cdk-local) wrapper.
 - [NodeJS v18.0.0](https://nodejs.org/en/download/) with `npm` package manager.
 

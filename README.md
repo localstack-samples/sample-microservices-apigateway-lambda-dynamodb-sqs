@@ -25,7 +25,7 @@ TODO
 
 - LocalStack Pro
 - [AWS CLI](https://docs.localstack.cloud/user-guide/integrations/aws-cli/) with the `awslocal` wrapper.
-- [CDK](https://docs.localstack.cloud/user-guide/integrations/aws-cdk/) with the `cdklocal` wrapper.
+- [CDK](https://docs.localstack.cloud/user-guide/integrations/aws-cdk/) with the [`cdklocal`](https://github.com/localstack/aws-cdk-local) wrapper.
 - [NodeJS v18.0.0](https://nodejs.org/en/download/) with `npm` package manager.
 
 Start LocalStack Pro by setting your `LOCALSTACK_API_KEY` to activate the Pro features.

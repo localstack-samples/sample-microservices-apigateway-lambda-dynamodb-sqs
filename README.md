@@ -31,10 +31,10 @@ We are using the following AWS services and their features to build our infrastr
 - [CDK](https://docs.localstack.cloud/user-guide/integrations/aws-cdk/) with the [`cdklocal`](https://github.com/localstack/aws-cdk-local) wrapper.
 - [NodeJS v18.0.0](https://nodejs.org/en/download/) with `npm` package manager.
 
-Start LocalStack Pro by setting your `LOCALSTACK_API_KEY` to activate the Pro features.
+Start LocalStack Pro by setting your `LOCALSTACK_AUTH_TOKEN` to activate the Pro features.
 
 ```shell
-export LOCALSTACK_API_KEY=<your-api-key>
+export LOCALSTACK_AUTH_TOKEN=<your-api-key>
 EXTRA_CORS_ALLOWED_ORIGINS=* localstack start -d
 ```
 

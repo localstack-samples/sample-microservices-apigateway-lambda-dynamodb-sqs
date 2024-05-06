@@ -37,7 +37,7 @@ export class FriendMicroservicesStack extends Stack {
     super(scope, id, props);
 
     const functionProp: NodejsFunctionProps = {
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       timeout: cdk.Duration.seconds(10000),
       memorySize: 1024,
     };

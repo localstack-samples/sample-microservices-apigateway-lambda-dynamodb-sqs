@@ -26,16 +26,20 @@ We are using the following AWS services and their features to build our infrastr
 
 ## Prerequisites
 
-- LocalStack Pro
+- A valid [LocalStack for AWS license](https://localstack.cloud/pricing). Your license provides a [`LOCALSTACK_AUTH_TOKEN`](https://docs.localstack.cloud/getting-started/auth-token/) to activate LocalStack.
+- [`localstack` CLI](https://docs.localstack.cloud/getting-started/installation/#localstack-cli).
 - [AWS CLI](https://docs.localstack.cloud/user-guide/integrations/aws-cli/) with the [`awslocal`](https://github.com/localstack/awscli-local) wrapper.
 - [CDK](https://docs.localstack.cloud/user-guide/integrations/aws-cdk/) with the [`cdklocal`](https://github.com/localstack/aws-cdk-local) wrapper.
-- [NodeJS v18.0.0](https://nodejs.org/en/download/) with `npm` package manager.
+- [Node.js](https://nodejs.org/en/download/) with `npm` package manager.
 
-Start LocalStack Pro by setting your `LOCALSTACK_AUTH_TOKEN` to activate the Pro features.
+## Start LocalStack
+
+Start LocalStack with the `LOCALSTACK_AUTH_TOKEN` pre-configured:
 
 ```shell
-export LOCALSTACK_AUTH_TOKEN=<your-api-key>
-EXTRA_CORS_ALLOWED_ORIGINS=* localstack start -d
+export LOCALSTACK_AUTH_TOKEN=<your-auth-token>
+make start
+make ready
 ```
 
 ## Instructions

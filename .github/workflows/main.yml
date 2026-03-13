@@ -20,12 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
 
       - name: Install CDK
         run: |
@@ -38,13 +38,13 @@ jobs:
 
       - name: Start LocalStack
         env:
-          LOCALSTACK_API_KEY: ${{ secrets.LOCALSTACK_API_KEY }}
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
         run: |
           pip install localstack awscli-local[ver1]
           pip install terraform-local
           docker pull localstack/localstack-pro:latest
           # Start LocalStack in the background
-          EXTRA_CORS_ALLOWED_ORIGINS=* DEBUG=1 localstack start -d
+          EXTRA_CORS_ALLOWED_ORIGINS=* DEBUG=1 LOCALSTACK_AUTH_TOKEN=$LOCALSTACK_AUTH_TOKEN localstack start -d
           # Wait 30 seconds for the LocalStack container to become ready before timing out
           echo "Waiting for LocalStack startup..."
           localstack wait -t 15
@@ -104,7 +104,7 @@ jobs:
 
       - name: Upload the Diagnostic Report
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: diagnose.json.gz
           path: ./diagnose.json.gz

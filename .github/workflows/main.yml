@@ -61,28 +61,9 @@ jobs:
           awslocal sqs list-queues 
           awslocal dynamodb list-tables
 
-      - name: Send Messages
+      - name: Run the tests
         run: |
-          front_queue_url=$(awslocal sqs list-queues | jq -r .QueueUrls[0])
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/testMessagesFirst.json
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/testMessagesSecond.json
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/testMessagesThird.json
-
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/cornerCase1.json
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/cornerCase2.json
-
-
-      - name: Run tests
-        run: |
-          yarn test
-          endpoint_url=$(cat cdk_outputs.json | jq -r .FriendMicroservicesStack[])
-          result_player_1=$(curl -X GET "$endpoint_url"friends/player1 | jq -r .[0].friend_id)
-          result_player_2=$(curl -X GET "$endpoint_url"friends/player2 | jq -r .[0].friend_id)
-          if [[ $result_player_1 != "player2" ]] || [[ $result_player_2 != "player1" ]]; then
-            echo "unexpected response"
-            echo $result_player_1 $result_player_2
-            exit 1
-          fi
+          yarn integ-test
 
       - name: Send a Slack notification
         if: failure() || github.event_name != 'pull_request'

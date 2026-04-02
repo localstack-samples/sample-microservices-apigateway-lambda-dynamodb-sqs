@@ -33,13 +33,21 @@ const friendPk = keyMap.get(Friend)!.get(Keys.PK)!;
 const friendSk = keyMap.get(Friend)!.get(Keys.SK)!;
 
 export class FriendMicroservicesStack extends Stack {
+  public readonly queueUrl: string;
+  public readonly tableName: string;
+  public readonly apiUrl: string;
+
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const functionProp: NodejsFunctionProps = {
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_22_X,
       timeout: cdk.Duration.seconds(10000),
       memorySize: 1024,
+      bundling: {
+        // aws-sdk v2 is NOT in the Node 22 Lambda runtime, must be bundled
+        externalModules: [],
+      },
     };
 
     const frontHandler = new NodejsFunction(this, "frontHandler", {
@@ -102,7 +110,9 @@ export class FriendMicroservicesStack extends Stack {
     friendTable.grantWriteData(unfriendStateHandler);
     friendTable.grantReadData(readHandler);
 
-    const frontQueue = new Queue(this, "frontQueue");
+    const frontQueue = new Queue(this, "frontQueue", {
+      queueName: cdk.PhysicalName.GENERATE_IF_NEEDED,
+    });
     frontHandler.addEventSource(
       new SqsEventSource(frontQueue, {
         reportBatchItemFailures: true,
@@ -199,5 +209,14 @@ export class FriendMicroservicesStack extends Stack {
       .addResource("{playerId}")
       .addResource("{friendId}")
       .addMethod("GET");
+
+    // Expose resource identifiers for integration tests
+    this.queueUrl = frontQueue.queueUrl;
+    this.tableName = friendTable.tableName;
+    this.apiUrl = readAPI.url;
+
+    new cdk.CfnOutput(this, "QueueUrl", { value: frontQueue.queueUrl });
+    new cdk.CfnOutput(this, "TableName", { value: friendTable.tableName });
+    new cdk.CfnOutput(this, "ApiUrl", { value: readAPI.url });
   }
 }

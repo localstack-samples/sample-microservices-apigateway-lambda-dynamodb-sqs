@@ -1,4 +1,4 @@
-name: Deploy on LocalStack 
+name: Deploy on LocalStack
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
     branches:
       - main
   schedule:
-    # “At 00:00 on Sunday.”
+    # "At 00:00 on Sunday."
     - cron: "0 0 * * 0"
   workflow_dispatch:
 
@@ -27,62 +27,24 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install CDK
-        run: |
-          npm install -g aws-cdk-local aws-cdk
-          cdklocal --version
-
       - name: Install dependencies
         run: |
-          yarn
+          npm install
 
       - name: Start LocalStack
         env:
           LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
         run: |
           pip install localstack awscli-local[ver1]
-          pip install terraform-local
           docker pull localstack/localstack-pro:latest
-          # Start LocalStack in the background
           EXTRA_CORS_ALLOWED_ORIGINS=* DEBUG=1 LOCALSTACK_AUTH_TOKEN=$LOCALSTACK_AUTH_TOKEN localstack start -d
-          # Wait 30 seconds for the LocalStack container to become ready before timing out
           echo "Waiting for LocalStack startup..."
-          localstack wait -t 15
+          localstack wait -t 30
           echo "Startup complete"
 
-      - name: Deploy using CDK
+      - name: Run integration tests
         run: |
-          cdklocal bootstrap aws://000000000000/us-east-1
-          cdklocal deploy --require-approval never --outputs-file cdk_outputs.json
-
-      - name: List the resources
-        run: |
-          awslocal lambda list-functions
-          awslocal sqs list-queues 
-          awslocal dynamodb list-tables
-
-      - name: Send Messages
-        run: |
-          front_queue_url=$(awslocal sqs list-queues | jq -r .QueueUrls[0])
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/testMessagesFirst.json
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/testMessagesSecond.json
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/testMessagesThird.json
-
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/cornerCase1.json
-          awslocal sqs send-message-batch --queue-url $front_queue_url --entries file://test/cornerCase2.json
-
-
-      - name: Run tests
-        run: |
-          yarn test
-          endpoint_url=$(cat cdk_outputs.json | jq -r .FriendMicroservicesStack[])
-          result_player_1=$(curl -X GET "$endpoint_url"friends/player1 | jq -r .[0].friend_id)
-          result_player_2=$(curl -X GET "$endpoint_url"friends/player2 | jq -r .[0].friend_id)
-          if [[ $result_player_1 != "player2" ]] || [[ $result_player_2 != "player1" ]]; then
-            echo "unexpected response"
-            echo $result_player_1 $result_player_2
-            exit 1
-          fi
+          ./run-integ-tests.sh
 
       - name: Send a Slack notification
         if: failure() || github.event_name != 'pull_request'

@@ -44,6 +44,18 @@ jspm_packages/
 # TypeScript cache
 *.tsbuildinfo
 
+# Sources
+lambda/**/*.js
+lambda/**/*.d.ts
+integ-tests/**/*.js
+integ-tests/**/*.d.ts
+bin/**/*.js
+bin/**/*.d.ts
+lib/**/*.js
+lib/**/*.d.ts
+models/**/*.js
+models/**/*.d.ts
+
 # Optional npm cache directory
 .npm
 
@@ -108,3 +120,4 @@ cdk.context.json
 .cdk.staging/
 cdk.out/
 *.tabl.json
+*.snapshot

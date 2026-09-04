@@ -26,10 +26,10 @@ We are using the following AWS services and their features to build our infrastr
 
 ## Prerequisites
 
-- A valid [LocalStack for AWS license](https://localstack.cloud/pricing). Your license provides a [`LOCALSTACK_AUTH_TOKEN`](https://docs.localstack.cloud/getting-started/auth-token/) to activate LocalStack.
-- [`localstack` CLI](https://docs.localstack.cloud/getting-started/installation/#localstack-cli).
-- [AWS CLI](https://docs.localstack.cloud/user-guide/integrations/aws-cli/) with the [`awslocal`](https://github.com/localstack/awscli-local) wrapper.
-- [CDK](https://docs.localstack.cloud/user-guide/integrations/aws-cdk/) with the [`cdklocal`](https://github.com/localstack/aws-cdk-local) wrapper.
+- A valid [LocalStack for AWS license](https://localstack.cloud/pricing). Your license provides a [`LOCALSTACK_AUTH_TOKEN`](https://docs.localstack.cloud/aws/getting-started/auth-token/) to activate LocalStack.
+- [`lstk` CLI](https://docs.localstack.cloud/aws/developer-tools/running-localstack/lstk/), installed via `npm install -g @localstack/lstk` or `brew install localstack/tap/lstk`.
+- [AWS CLI](https://docs.localstack.cloud/user-guide/integrations/aws-cli/), required by `lstk aws`.
+- [CDK](https://docs.localstack.cloud/user-guide/integrations/aws-cdk/), used via the `lstk cdk` proxy.
 - [Node.js](https://nodejs.org/en/download/) with `npm` package manager.
 
 ## Start LocalStack
@@ -39,7 +39,6 @@ Start LocalStack with the `LOCALSTACK_AUTH_TOKEN` pre-configured:
 ```shell
 export LOCALSTACK_AUTH_TOKEN=<your-auth-token>
 make start
-make ready
 ```
 
 ## Instructions
@@ -48,7 +47,7 @@ You can build and deploy the sample application on LocalStack by running our `Ma
 
 ### Creating the infrastructure
 
-To create the AWS infrastructure locally, you can use CDK and our `cdklocal` wrapper. Before you can deploy the infrastructure, you need to install the application dependencies:
+To create the AWS infrastructure locally, you can use CDK and the `lstk cdk` proxy. Before you can deploy the infrastructure, you need to install the application dependencies:
 
 ```shell
 yarn
@@ -57,8 +56,8 @@ yarn
 To deploy the infrastructure, you can run the following command:
 
 ```shell
-cdklocal bootstrap aws://000000000000/us-east-1
-cdklocal deploy
+lstk cdk bootstrap aws://000000000000/us-east-1
+lstk cdk deploy
 ```
 
 *Note: Make sure your region is set to `us-east-1` in your AWS CLI configuration. Alternatively you can adjust the bootstrap command to match your region.
@@ -71,22 +70,22 @@ As an output of the last command, you will see the API Gateway endpoint URL. You
 To test the microservice, we will send Friend Action Events to the front SQS queue. We will use the AWS CLI to send the events to the queue. To get the Queue URL, you can run the following command:
 
 ```shell
-awslocal sqs list-queues
+lstk aws sqs list-queues
 ```
 
 Get the URL of the Front Queue and use the following commands to send a friend request event:
 
 ```shell
-awslocal sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/testMessagesFirst.json
-awslocal sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/testMessagesSecond.json
-awslocal sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/testMessagesThird.json
+lstk aws sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/testMessagesFirst.json
+lstk aws sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/testMessagesSecond.json
+lstk aws sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/testMessagesThird.json
 ```
 
 To test corner cases, you can send the following messages to the queue:
 
 ```shell
-awslocal sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/cornerCase1.json
-awslocal sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/cornerCase2.json
+lstk aws sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/cornerCase1.json
+lstk aws sqs send-message-batch --queue-url <QUEUE_URL> --entries file://test/cornerCase2.json
 ```
 
 To test the microservice now, send the following command using `cURL`:
@@ -105,7 +104,7 @@ yarn test
 
 ## GitHub Action
 
-This application sample hosts an example GitHub Action workflow that starts up LocalStack, deploys the infrastructure, and checks the created resources using  `awslocal`. You can find the workflow in the  `.github/workflows/main.yml`  file. To run the workflow, you can fork this repository and push a commit to the  `main`  branch.
+This application sample hosts an example GitHub Action workflow that starts up LocalStack, deploys the infrastructure, and checks the created resources using  `lstk aws`. You can find the workflow in the  `.github/workflows/main.yml`  file. To run the workflow, you can fork this repository and push a commit to the  `main`  branch.
 
 Users can adapt this example workflow to run in their own CI environment. LocalStack supports various CI environments, including GitHub Actions, CircleCI, Jenkins, Travis CI, and more. You can find more information about the CI integration in the  [LocalStack documentation](https://docs.localstack.cloud/user-guide/ci/).
 

@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install lstk and CDK
+        run: npm install -g @localstack/lstk aws-cdk
+
       - name: Install dependencies
         run: |
           npm install
@@ -35,12 +38,8 @@ jobs:
         env:
           LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
         run: |
-          pip install localstack awscli-local[ver1]
           docker pull localstack/localstack-pro:latest
-          EXTRA_CORS_ALLOWED_ORIGINS=* DEBUG=1 LOCALSTACK_AUTH_TOKEN=$LOCALSTACK_AUTH_TOKEN localstack start -d
-          echo "Waiting for LocalStack startup..."
-          localstack wait -t 30
-          echo "Startup complete"
+          LOCALSTACK_EXTRA_CORS_ALLOWED_ORIGINS=* LOCALSTACK_DEBUG=1 lstk start
 
       - name: Run integration tests
         run: |

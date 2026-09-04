@@ -27,8 +27,8 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install lstk
-        run: npm install -g @localstack/lstk
+      - name: Install lstk and CDK
+        run: npm install -g @localstack/lstk aws-cdk
 
       - name: Install dependencies
         run: |

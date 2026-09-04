@@ -8,7 +8,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk",
-    "cdklocal": "cdklocal",
+    "cdklocal": "lstk cdk",
     "integ-test": "./run-integ-tests.sh"
   },
   "devDependencies": {
@@ -17,7 +17,6 @@
     "@types/aws-lambda": "^8.10.145",
     "@types/node": "^22.0.0",
     "aws-cdk": "latest",
-    "aws-cdk-local": "^3.0.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.5.0"
   },

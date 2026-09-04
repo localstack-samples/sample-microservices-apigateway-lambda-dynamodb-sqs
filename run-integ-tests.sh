@@ -27,7 +27,7 @@ export NODE_TLS_REJECT_UNAUTHORIZED="0"
 echo "==> Checking LocalStack is running..."
 if ! curl -s "http://localhost:4566/_localstack/health" > /dev/null 2>&1; then
   echo "ERROR: LocalStack is not running."
-  echo "Start it with: localstack start -d"
+  echo "Start it with: lstk start"
   exit 1
 fi
 echo "    LocalStack is running."
@@ -38,7 +38,7 @@ npx tsc
 
 # Bootstrap CDK on LocalStack
 echo "==> Bootstrapping CDK on LocalStack..."
-npx cdklocal bootstrap aws://000000000000/us-east-1 --force 2>&1 || true
+lstk cdk bootstrap aws://000000000000/us-east-1 --force 2>&1 || true
 
 # Run integ-runner
 echo ""
